@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CID MadOut2</title>
+<style>
+body{margin:0;font-family:Arial;background:#f2f2f2;color:#111}#login{min-height:100vh;display:grid;place-items:center;background:#070707}.box{background:#fff;padding:30px;border-radius:20px;width:340px}input,button,select{width:100%;padding:11px;margin:6px 0;box-sizing:border-box}button{background:#000;color:#fff;border:0;border-radius:8px}.app{display:none}.top{background:#050505;color:#fff;padding:12px;position:sticky;top:0}.nav{display:flex;gap:5px;overflow:auto}.nav button{width:auto;background:transparent;color:#aaa}.nav button.active{background:#fff;color:#000}.archive{color:#f33}.view{display:none;max-width:1200px;margin:auto;padding:25px}.view.active{display:block}.card{background:#fff;border:1px solid #ddd;border-radius:15px;padding:18px;margin:15px 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.archiveBox{background:#fff1f1;border:2px solid #b00000;border-radius:15px;padding:20px}.row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:12px}.tag{border:1px solid #888;border-radius:20px;padding:5px 10px}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style></head><body>
+<div id="login"><div class="box"><h1>CID</h1><p>منصة خاصة بلعبة MadOut2</p><input id="u" placeholder="اسم المستخدم"><input id="p" type="password" placeholder="كلمة المرور"><button onclick="login()">دخول</button><p id="msg"></p></div></div>
+<div id="app" class="app"><header class="top"><div class="nav">
+<button onclick="show('home')">الرئيسية</button><button onclick="show('members')">الأعضاء</button><button onclick="show('tasks')">المهام</button><button onclick="show('wanted')">المطلوبين</button><button onclick="show('rules')">القوانين</button><button onclick="show('ann')">الإعلانات</button><button onclick="show('account')">حسابي</button><button onclick="show('chat')">المحادثات</button><button onclick="show('note')">إرسال ملاحظة للإدارة</button><button class="archive" onclick="showArchive()">الأرشيف للمعلومات الخاص</button><button onclick="logout()">خروج</button>
+</div></header>
+<section id="home" class="view active"><h1>لوحة CID</h1><div class="card">هذه المنصة خاصة بلعبة MadOut2 ولأغراض اللعب والترفيه.</div><div class="grid"><div class="card"><b>الأعضاء</b><h2 id="mc">-</h2></div><div class="card"><b>رتب النظام</b><h2>6</h2></div><div class="card"><b>الأرشيف</b><h2>🔒</h2></div></div></section>
+<section id="members" class="view"><h1>الأعضاء والرتب</h1><div class="card">
+<div class="row"><b>👑 المدير</b><span>حذف + إدارة كاملة + الأرشيف</span></div>
+<div class="row"><b>⭐ النائب</b><span>حذف + إدارة الأعضاء والمطلوبين والمهام + إضافة معلومات</span></div>
+<div class="row"><b>📢 المارشال</b><span>إدارة الإعلانات + المطلوبين والمهام</span></div>
+<div class="row"><b>🎖️ الجنرال</b><span>المطلوبين والمهام + إضافة معلومات</span></div>
+<div class="row"><b>🔰 المشرف</b><span>المطلوبين والمهام</span></div>
+<div class="row"><b>👤 العضو</b><span>إضافة معلومات فقط</span></div></div><div id="membersBox" class="card"></div></section>
+<section id="tasks" class="view"><h1>المهام</h1><div class="card">قسم المهام جاهز للربط بإدارة المهام والصلاحيات.</div></section>
+<section id="wanted" class="view"><h1>المطلوبين</h1><div class="card"><b>W-001 — ID-4821</b><p>العمر: توجد في الأرشيف</p><p>السكن: المدينة — داخل اللعبة</p><span class="tag">تحقيق</span></div></section>
+<section id="rules" class="view"><h1>القوانين</h1><div class="card"><ol><li>الالتزام بأنظمة CID.</li><li>عدم تجاوز الصلاحيات.</li><li>الحفاظ على سرية الحساب.</li><li>استخدام حساب مخصص أو جديد معتمد عند تنفيذ مهام CID.</li></ol></div></section>
+<section id="ann" class="view"><h1>الإعلانات</h1><div id="announcements" class="card">جارٍ التحميل...</div>
+<div id="annManage" class="card" style="display:none"><h3>نشر إعلان</h3><input id="annTitle" placeholder="عنوان الإعلان"><textarea id="annBody" style="width:100%;min-height:100px" placeholder="نص الإعلان"></textarea><button onclick="publishAnnouncement()">نشر</button><p id="annMsg"></p></div></section>
+<section id="account" class="view"><h1>حسابي</h1><div id="accountBox" class="card"></div></section>
+<section id="chat" class="view"><h1>المحادثات الخاصة</h1><p class="muted">كل عضو يراسل عضوًا آخر مباشرة. محتوى المحادثة لا يظهر في واجهة المدير.</p><div class="card"><div id="chatUsers"></div><div id="messages" style="min-height:180px;margin-top:15px"></div><input id="chatText" placeholder="اكتب رسالة"><button onclick="sendMessage()">إرسال</button></div></section>
+<section id="note" class="view"><h1>إرسال ملاحظة للإدارة</h1><div class="card"><textarea id="noteText" style="width:100%;min-height:120px" placeholder="اكتب رسالتك للإدارة"></textarea><button onclick="sendNote()">إرسال</button><p id="noteMsg"></p></div></section>
+<section id="archive" class="view"><div class="archiveBox"><h1>🔒 الأرشيف للمعلومات الخاص</h1><p>هذا القسم للمدير فقط. لا يمكن لأي رتبة أخرى الوصول إلى المعلومات الخاصة.</p><div id="archiveBox"></div>
+<div id="auditBox" class="card" style="display:none"></div></div></section>
+<script>
+let me=null;
+async function api(url,opt={}){let r=await fetch(url,{headers:{'Content-Type':'application/json'},...opt});let d=await r.json();if(!r.ok)throw Error(d.error||'خطأ');return d}
+async function login(){try{me=await api('/api/login',{method:'POST',body:JSON.stringify({username:u.value,password:p.value})});login.style.display='none';app.style.display='block';accountBox.innerHTML='<h2>'+me.name+'</h2><p>Username: '+me.username+'</p><p><b>الرتبة:</b> '+rankIcon(me.rank)+' <strong>'+me.rank+'</strong></p>';loadMembers();loadChatUsers();loadAnnouncements()}catch(e){msg.textContent=e.message;msg.style.color='red'}}
+async function logout(){await api('/api/logout',{method:'POST'});location.reload()}
+function show(id){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active')}
+async function loadMembers(){let a=await api('/api/members');mc.textContent=a.length;membersBox.innerHTML=a.map(x=>'<div class="row"><b>'+x.name+'</b><span>'+x.username+'</span><span>'+x.rank+'</span></div>').join('')}
+async function showArchive(){show('archive');if(!me||me.rank!=='مدير'){archiveBox.innerHTML='<h3>🔒 الوصول مرفوض</h3><p>الأرشيف للمعلومات الخاص متاح للمدير فقط.</p>';auditBox.style.display='none';return}let a=await api('/api/archive');archiveBox.innerHTML=a.length?a.map(x=>'<div class="card"><b>'+x.field+'</b><p>'+x.value+'</p></div>').join(''):'<p>لا توجد معلومات محفوظة.</p>';let log=await api('/api/audit');auditBox.style.display='block';auditBox.innerHTML='<h3>سجل التدقيق</h3>'+ (log.length?log.map(x=>'<div class="row"><span>'+x.action+'</span><span>'+x.created_at+'</span></div>').join(''):'<p>لا توجد عمليات مسجلة.</p>')}
+
+let selectedUser=null;
+async function loadChatUsers(){let a=await api('/api/users');chatUsers.innerHTML=a.filter(x=>x.id!==me.id).map(x=>'<button onclick="selectChat('+x.id+')" style="width:100%;margin:4px 0">'+x.name+' — '+x.rank+'</button>').join('')}
+async function selectChat(id){selectedUser=id;let a=await api('/api/messages/'+id);messages.innerHTML=a.length?a.map(x=>'<div class="card"><b>'+x.sender_name+' — '+x.sender_rank+'</b><p>'+x.body+'</p><small>'+x.created_at+'</small></div>').join(''):'لا توجد رسائل بعد.'}
+async function sendMessage(){if(!selectedUser||!chatText.value.trim())return;await api('/api/messages',{method:'POST',body:JSON.stringify({recipient_id:selectedUser,body:chatText.value.trim()})});chatText.value='';selectChat(selectedUser)}
+async function sendNote(){if(!noteText.value.trim())return;await api('/api/admin-notes',{method:'POST',body:JSON.stringify({body:noteText.value.trim()})});noteText.value='';noteMsg.textContent='تم إرسال الملاحظة للإدارة.'}
+
+function rankIcon(r){return r==='مدير'?'👑':r==='نائب'?'⭐':r==='مارشال'?'📢':r==='جنرال'?'🎖️':r==='مشرف'?'🔰':'👤'}
+async function loadAnnouncements(){try{let a=await api('/api/announcements');announcements.innerHTML=a.length?a.map(x=>'<div class="card"><h3>'+rankIcon(x.sender_rank)+' '+x.title+'</h3><p>'+x.body+'</p><small>نشر بواسطة <b>'+x.sender_name+'</b> — '+x.sender_rank+' — '+x.created_at+'</small></div>').join(''):'<p>لا توجد إعلانات.</p>';annManage.style.display=(me.rank==='مدير'||me.rank==='نائب')?'block':'none'}catch(e){announcements.innerHTML='<p>'+e.message+'</p>'}}
+async function publishAnnouncement(){if(!annTitle.value.trim()||!annBody.value.trim())return;await api('/api/announcements',{method:'POST',body:JSON.stringify({title:annTitle.value.trim(),body:annBody.value.trim()})});annTitle.value='';annBody.value='';annMsg.textContent='تم نشر الإعلان.';loadAnnouncements()}
+</script></div></body></html>
